@@ -30,6 +30,7 @@ def check_file_uploaded_bulk(file_names, db_token):  # TODO: add
 
 
 def insert_data(other_data_dict, db_token):
+    print(other_data_dict)
     new_upload = db_token.cursor()
     new_upload_sql = "INSERT INTO `tbl_data` " \
                      "(data_user, " \
@@ -48,18 +49,18 @@ def insert_data(other_data_dict, db_token):
                      "VALUES " \
                      "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     new_upload_val = (1,
-                      other_data_dict["data_scenario"],
-                      other_data_dict["data_score"],
-                      other_data_dict["data_version"],
-                      other_data_dict["data_sensitivityH"],
-                      other_data_dict["data_sensitivityV"],
-                      other_data_dict["data_dpi"],
-                      other_data_dict["data_sensitivityType"],
-                      other_data_dict["data_resolution"],
-                      other_data_dict["data_fpsMax"],
-                      other_data_dict["data_fpsAvg"],
-                      other_data_dict["data_hash"],
-                      other_data_dict["data_fileName"])
+                      other_data_dict.get("data_scenario", "none"),
+                      other_data_dict.get("data_score", 0),
+                      other_data_dict.get("data_version", 0),
+                      other_data_dict.get("data_sensitivityH", 0),
+                      other_data_dict.get("data_sensitivityV", 0),
+                      other_data_dict.get("data_dpi", 0),
+                      other_data_dict.get("data_sensitivityType", "none"),
+                      other_data_dict.get("data_resolution", 0),
+                      other_data_dict.get("data_fpsMax", 0),
+                      other_data_dict.get("data_fpsAvg", 0),
+                      other_data_dict.get("data_hash", "none"),
+                      other_data_dict.get("data_fileName", "none"))
     new_upload.execute(new_upload_sql, new_upload_val)
     db_token.commit()
     return new_upload.lastrowid

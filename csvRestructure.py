@@ -16,11 +16,11 @@ def otherdata_to_dict(data):
                 other_data_dict["data_dpi"] = data_type[1]
             case 'Sens Scale:':
                 other_data_dict["data_sensitivityType"] = data_type[1]
-            case 'Resolution:':
+            case 'Resolution:' | 'Resolution':
                 other_data_dict["data_resolution"] = data_type[1]
             case 'Max FPS (config):':
                 other_data_dict["data_fpsMax"] = data_type[1]
-            case 'Avg FPS:':
+            case 'Avg FPS:' | 'Avg FPS':
                 other_data_dict["data_fpsAvg"] = data_type[1]
             case 'Hash:':
                 other_data_dict["data_hash"] = data_type[1]
@@ -32,6 +32,10 @@ def otherdata_to_dict(data):
 def killdata_to_dict(data, data_id):
     reformatted = []
     for line in data:
+        if line[11] == 'FALSE':
+            line[11] = 0
+        elif line[11] == 'TRUE':
+            line[11] = 1
         reformatted.append((
             1,
             data_id,
@@ -56,7 +60,7 @@ def weapondata_to_dict(data, data_id):
     reformatted = []
     line_number = 1
     for line in data:
-        if line[1] != 0:
+        if float(line[1]) > 0:
             acc = float(line[2])/float(line[1])
         else:
             acc = 0
