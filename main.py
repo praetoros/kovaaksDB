@@ -3,9 +3,7 @@ import sqlUpload
 import csv
 import mysql.connector
 
-
 if __name__ == '__main__':
-
     connectionDir = "H:\\OneDrive\\Development\\Python\\kovaaksDB\\db.csv"
     with open(connectionDir, 'r') as file:
         dbConnection = next(csv.reader(file))
@@ -15,11 +13,24 @@ if __name__ == '__main__':
             password=dbConnection[2],
             database=dbConnection[3]
         )
+    stats_dir = "J:\\stats\\"
 
-    print("Reading Files...")
-    outputData = fileGet.get_files_list_data("J:\\stats\\")
+    # Finding Files
+    fileNames = fileGet.get_file_names(stats_dir)
 
-    print("Uploading To DB")
-    sqlUpload.export_to_database(outputData, mydb)
+    # Check if files have been uploaded
+    if len(fileNames):
+        uploadedFileNames = sqlUpload.check_file_uploaded_bulk(fileNames, mydb)
 
-    print("Done")
+        # Get file names that have not been uploaded
+        localToUpload = fileGet.get_files_dif(fileNames, uploadedFileNames)
+
+        print(f'{len(localToUpload)} Files to be uploaded')
+
+        # Data for files that have not been uploaded
+        outputData = fileGet.get_files_list_data(localToUpload, stats_dir)
+
+        # Pass data to database
+        sqlUpload.export_to_database(outputData, mydb)
+
+        print("Done")

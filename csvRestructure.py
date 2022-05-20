@@ -29,11 +29,48 @@ def otherdata_to_dict(data):
     return other_data_dict
 
 
-def killdata_to_dict(data):
-    kill_data_dict = {}
-    return kill_data_dict
+def killdata_to_dict(data, data_id):
+    reformatted = []
+    for line in data:
+        reformatted.append((
+            1,
+            data_id,
+            line[0],
+            line[1],
+            line[2],
+            line[3],
+            line[4],
+            line[5],
+            line[6],
+            line[7],
+            line[8],
+            line[9],
+            line[10],
+            line[11]
+        ))
+
+    return reformatted
 
 
-def weapondata_to_dict(data):
-    weapon_data_dict = {}
-    return weapon_data_dict
+def weapondata_to_dict(data, data_id):
+    reformatted = []
+    line_number = 1
+    for line in data:
+        if line[1] != 0:
+            acc = float(line[2])/float(line[1])
+        else:
+            acc = 0
+        reformatted.append((
+            1,
+            data_id,
+            line_number,
+            acc,
+            line[0],
+            line[1],
+            line[2],
+            line[3],
+            line[4]
+        ))
+        line_number += 1
+
+    return reformatted

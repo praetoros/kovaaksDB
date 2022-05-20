@@ -3,13 +3,24 @@ import re
 import csv
 
 
-def get_files_list_data(stats_dir):
-    output_data = []
+def get_file_names(stats_dir):
     csv_files = []
-    dir_files = listdir(stats_dir)
-    for dirFile in dir_files:
+    for dirFile in listdir(stats_dir):
         if re.search(".csv$", dirFile):
             csv_files.append(dirFile)
+    return csv_files
+
+
+def get_files_dif(local, remote):
+    dif = []
+    for file in local:
+        if file not in remote:
+            dif.append(file)
+    return dif
+
+
+def get_files_list_data(csv_files, stats_dir):
+    output_data = []
 
     for csvFile in csv_files:
         write_to = ''
@@ -36,5 +47,5 @@ def get_files_list_data(stats_dir):
                             data_weapon.append(row)
                         case 'data_other':
                             data_other.append(row)
-        output_data.append([data_other.copy(), data_kill.copy(), data_weapon.copy()])
+        output_data.append([[csvFile].copy(), data_other.copy(), data_kill.copy(), data_weapon.copy()])
     return output_data
