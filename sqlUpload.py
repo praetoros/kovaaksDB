@@ -1,4 +1,5 @@
 import csvRestructure
+from datetime import datetime
 
 
 def export_to_database(list_of_stats, db_token):
@@ -16,7 +17,7 @@ def export_to_database(list_of_stats, db_token):
         insert_weapon(weapon_data_dict, db_token)
 
 
-def check_file_uploaded_bulk(file_names, db_token):  # TODO: add
+def check_file_uploaded_bulk(file_names, db_token):
     check_if_uploaded = db_token.cursor()
     placeholders = ', '.join('%s' for unused in file_names)
     check_if_uploaded_sql = "SELECT `data_fileName` FROM `tbl_data` where " \
@@ -45,9 +46,10 @@ def insert_data(other_data_dict, db_token):
                      "data_fpsMax, " \
                      "data_fpsAvg, " \
                      "data_hash," \
+                     "data_datePlayed," \
                      "data_fileName) " \
                      "VALUES " \
-                     "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                     "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     new_upload_val = (1,
                       other_data_dict.get("data_scenario", "none"),
                       other_data_dict.get("data_score", 0),
@@ -60,6 +62,8 @@ def insert_data(other_data_dict, db_token):
                       other_data_dict.get("data_fpsMax", 0),
                       other_data_dict.get("data_fpsAvg", 0),
                       other_data_dict.get("data_hash", "none"),
+                      other_data_dict.get("data_datePlayed",
+                                          datetime.strptime('0001.01.01-00.00.00', '%Y.%m.%d-%H.%M.%S')),
                       other_data_dict.get("data_fileName", "none"))
     new_upload.execute(new_upload_sql, new_upload_val)
     db_token.commit()

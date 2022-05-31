@@ -1,3 +1,7 @@
+import re
+from datetime import datetime
+
+
 def otherdata_to_dict(data):
     other_data_dict = {}
     for data_type in data:
@@ -26,6 +30,9 @@ def otherdata_to_dict(data):
                 other_data_dict["data_hash"] = data_type[1]
             case 'fileName':
                 other_data_dict["data_fileName"] = data_type[1]
+                string_time = re.search(r"(\d{4}.\d{2}.\d{2}-\d{2}.\d{2}.\d{2})", data_type[1])
+                if string_time:
+                    other_data_dict["data_datePlayed"] = datetime.strptime(string_time.group(0), '%Y.%m.%d-%H.%M.%S')
     return other_data_dict
 
 

@@ -3,8 +3,12 @@ import sqlUpload
 import csv
 import mysql.connector
 
+
 if __name__ == '__main__':
+
     connectionDir = "H:\\OneDrive\\Development\\Python\\kovaaksDB\\db.csv"
+    stats_dir = "J:\\stats\\"
+
     with open(connectionDir, 'r') as file:
         dbConnection = next(csv.reader(file))
         mydb = mysql.connector.connect(
@@ -13,7 +17,6 @@ if __name__ == '__main__':
             password=dbConnection[2],
             database=dbConnection[3]
         )
-    stats_dir = "J:\\stats\\"
 
     # Finding Files
     fileNames = fileGet.get_file_names(stats_dir)
